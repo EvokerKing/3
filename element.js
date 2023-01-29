@@ -7,10 +7,10 @@ window.customElements.define(
 
         render() {
             this.innerHTML = `
-                <div id="widget" style="padding: 10px 0; box-sizing: border-box; width: ${this.width}px; height: 35px;">
-                    <div id="inactive" style="width: ${parseFloat(this.width) - 30}px; height: 20px; background: #DDDDDD; position: relative; top: 5px; left: 15px; order: 0;">
-                        <div id="progress" style="width: ${this.progress}%; height: 100%; background: ${this.colors.progress}; border-radius: 0 10px 10px 0; position: absolute;"></div>
-                        <div id="active" style="width: ${this.active}%; height: 100%; background: ${this.colors.active}; border-radius: 0 10px 10px 0; position: absolute;"></div>
+                <div id="widget" style="padding: 10px 0; box-sizing: border-box; width: ${this.width}; height: 35px;">
+                    <div id="inactive" style="width: ${parseFloat(this.width) - 30}px; height: 20px; background: #DDDDDD; position: relative; top: 5px; left: 15px; order: 0; border-radius: 10px;">
+                        <div id="progress" style="width: ${(100/(this.length-1)*(this.currentProgress-1))+(100/(this.length-1)*(this.progress/100))}%; height: 100%; background: ${this.colors.progress}; border-radius: 0 10px 10px 0; position: absolute; border-radius: 10px;"></div>
+                        <div id="active" style="width: ${this.active}%; height: 100%; background: ${this.colors.active}; border-radius: 0 10px 10px 0; position: absolute; border-radius: 10px;"></div>
                     </div>
                     <div id="dots" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; position: relative; width: ${this.width}px; order: 1; bottom: 20px"></div>
                 </div>
@@ -18,7 +18,7 @@ window.customElements.define(
 
             const dots = document.getElementById('dots')
 
-            if (this.progress < 100) {
+            if (this.active < 100) {
                 for (let i = 1; i <= this.length; i++) {
                     const dot = document.createElement('div')
                     dot.id = `dot${i}`
@@ -52,6 +52,22 @@ window.customElements.define(
                     dot.appendChild(num)
                     dots.appendChild(dot)
                 }
+            } else {
+                const dot = document.createElement('div')
+                dot.id = `dot`
+                dot.style.boxSizing = 'border-box'
+                dot.style.display = 'flex'
+                dot.style.justifyContent = 'center'
+                dot.style.alignItems = 'center'
+                dot.style.width = '30px'
+                dot.style.height = '30px'
+                dot.style.borderRadius = '50%'
+                dot.style.background = this.colors.active
+                dot.style.border = '1px solid #FFFFFF'
+                dot.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px;"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>'
+                dots.style.justifyContent = 'center'
+
+                dots.appendChild(dot)
             }
         }
 
